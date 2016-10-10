@@ -1,0 +1,35 @@
+@startuml
+participant "Services\nMétier" as SM
+participant "Client"
+participant "Produit"
+participant "Structure"
+
+[-> SM: SMA004: getDossierClient(clientId)
+activate SM
+
+SM -> Client: SOM001: getClientById(clientId)
+activate Client
+SM <<-- Client: Client, List<segmentId>\nportefeuilleId, agenceId
+deactivate Client
+
+SM -> Structure: SOM007: getConseillerByWalletId(portefeuilleId)
+activate Structure
+SM <<-- Structure: Conseiller
+deactivate Structure
+
+SM -> Structure: SOM006: getAgenceById(agenceId)
+activate Structure
+SM <<-- Structure: Agence
+deactivate Structure
+
+group for each segmentId
+    SM -> Produit: SOM009: getSegmentById(segmentId)
+    activate Produit
+    SM <<-- Produit: Segment
+    deactivate Produit
+end
+
+[<<-- SM: Client, List<Segment>\nConseiller, Agence
+deactivate SM
+
+@enduml

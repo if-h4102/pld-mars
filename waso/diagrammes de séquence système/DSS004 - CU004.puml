@@ -1,0 +1,14 @@
+@startuml
+actor "Utilisateur"
+participant "Interface"
+participant "Système"
+
+Utilisateur -> Interface: ConsulterDossierClient
+
+Interface -> Système: SM004: consulterDossierClient(clientId)
+activate Système
+
+Interface <<-- Système: Client, List<Personne>, List<Segment>\nAgence, Conseiller
+deactivate Système
+
+@enduml
