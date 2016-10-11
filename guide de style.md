@@ -13,6 +13,10 @@ obtenir, récupérer, modifier, mettre à jour.
 La veleur "`id` de `entitee`" se construit à la française: `idEntitee`.
 Exemple: `idClient`
 
+Omettre les articles (`le`, `la`), même pour les formes contractées comme `du`
+(= `de le`). Exemple: `listerContactsClient` (au lieu de
+`listerLesContactsDuClient`)
+
 ### Exemples
 
 - `obtenirAgentParIdClient`
