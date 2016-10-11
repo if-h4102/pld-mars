@@ -23,7 +23,7 @@ A -> IHM : Rechercher tous les\ncontrats client
 
 
 A -> IHM : Consulter contrat client
-    IHM -> Système : rechercherContrat(**idClient**, **codeSouscription**)
+    IHM -> Système : rechercherContrat(**codeSouscription**)
     Système --> IHM : //Contrat//, liste<//Option//>, //Souscription//, //Domaine//
 
 @enduml
