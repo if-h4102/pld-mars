@@ -1,0 +1,35 @@
+@startuml
+actor Agent as A
+actor Client as C
+
+database DB
+
+skinparam packageStyle rect
+
+top to bottom direction
+
+rectangle Système {
+usecase UC4.1 as "Consulter Contrats"
+usecase UC4.2 as "Souscrire option"
+usecase UC4.3 as "Résilier option"
+usecase UC4.4 as "Résilier contrat"
+usecase UC4.5 as "Choisir périodicité"
+}
+
+A -> UC4.1
+A .> UC4.2
+A .> UC4.3
+A .> UC4.4
+A .> UC4.5
+
+C .down.> A : via Agent
+
+UC4.1 -> DB
+UC4.2 -> DB
+UC4.3 -> DB
+UC4.4 -> DB
+UC4.5 -> DB
+
+
+
+@enduml

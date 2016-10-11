@@ -15,9 +15,9 @@ suivante en 5 zones.
   banque et à la concurrence, tant en terme de produits qu’en terme de
   services, 
 
-- _**Zone Contrats** : il s’agit de la synthèse des contrats que possède le
+- **Zone Contrats** : il s’agit de la synthèse des contrats que possède le
   client à la banque, selon les domaines (assurances, téléphonie mobile, santé, 
-  surveillance)._
+  surveillance).
 
 - **Zone  relation  banque/client** : elle regroupe les informations
   intéressant l’agent dans ses relations avec le client : les techniques de
