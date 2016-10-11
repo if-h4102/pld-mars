@@ -1,0 +1,16 @@
+@startuml
+title DA003 - Gestion des contacts
+
+(*) --> "Lister les contacts du client" as listClient
+
+listClient --> "Consulter un contact" as consulter
+listClient --> "Créer un contact" as creer_contact
+
+consulter --> (*)
+consulter --> "Modifier les données du contact" as modifier
+
+modifier --> (*)
+modifier --> "Éditer les propositions de contrat" as propositions
+propositions --> modifier
+
+@enduml

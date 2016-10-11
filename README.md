@@ -18,7 +18,7 @@ Les diagrammes UML sont générés à partir de déclarations
 
    - Windows
      
-     1. Save `plantuml.jar` in `C:/Program Files/PlantUML/plantuml.jar`
+     1. Save `plantuml.jar` at `C:/Program Files/PlantUML/plantuml.jar`
      
      2. Create a file `plantuml.cmd` in the same directory with this content:
      
