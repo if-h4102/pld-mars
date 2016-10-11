@@ -29,7 +29,11 @@ Les diagrammes UML sont générés à partir de déclarations
      
      3. Add the directory to your `PATH` environment variable.
 
-   - Linux: Check `alias` and send a PR to add instructions here.
+   - Linux: 
+   1. Create a file named plantuml in /bin
+   2. Put this line in your file :`java -jar PATH/plantuml.jar -charset UTF-8 $@`, with PATH the path to the download     plantuml.jar
+   3. Put the permission of execute on the file /bin/plantuml.
+   4. Now, you use the command `plantuml`, with any arguments.
 
 ### Utilisation
 
