@@ -1,0 +1,21 @@
+@startuml
+
+title DSS4.3: Résilier option\n
+
+actor Agent as A
+participant IHM
+participant Système
+
+
+A -> IHM : Résilier option
+    IHM -> Système : listerContratsClient(**idClient**)
+    Système --> IHM : liste<//Souscription//, //Domaine//>
+    IHM -> Système : rechercherContrat(**codeContrat**)
+    note right : On veut bien le contrat //générique//
+    Système --> IHM : //Souscription//, //Domaine//, liste<//Option//>
+    IHM -> Système : detaillerOption(**idOption**)
+    Système --> IHM : //Option//, //InfosOption//
+    IHM -> Système : resilierOption(**codeSouscription**,**idOption** )
+    Système --> IHM : //Souscription//
+
+@enduml
