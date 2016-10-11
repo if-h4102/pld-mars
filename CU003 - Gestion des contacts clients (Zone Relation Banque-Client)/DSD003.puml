@@ -1,0 +1,184 @@
+@startuml
+title DSA003 - Gestion des contacts
+
+actor Agent
+participant Interface as IHM
+participant "Services\nMétier\nApplicatifs" as SMA
+participant Contact as C
+participant Client
+participant Structure
+participant Contrat
+participant Produit
+
+Agent -->> IHM: demandeSauvegardeModifications
+    IHM -> SMA: mettreAJourContact(Contact,\nListe<PropositionContrat>, Liste<PropositionOffre>)
+    activate SMA
+        SMA -> C: mettreAJourContact(Contact,\nListe<PropositionContrat>, Liste<PropositionOffre>)
+        activate C
+        SMA <- C
+        deactivate C
+    IHM <<-- SMA
+    deactivate SMA
+
+'Fin: Mettre à jour un contact
+
+== Lister les contacts d'un client ==
+
+'Lister les contacts d'un client
+Agent -->> IHM: demandeListeContactsClient
+    IHM -> SMA: listerContactsClient(idClient)
+    activate SMA
+        SMA -> C: listerContactsClient(idClient)
+        activate C
+        SMA <<-- C: Liste<Contact>
+        deactivate C
+    IHM <<-- SMA: Liste<Contact>
+    deactivate SMA
+'Fin: Lister les contacts du client
+
+== Consulter un contact ==
+
+'Consulter un contact
+Agent -->> IHM: demandeConsultationContact
+    IHM -> SMA: consulterContact(idContact)
+    activate SMA
+        SMA -> C: obtenirContact(idContact)
+        activate C
+        SMA <<-- C: Contact
+        deactivate C
+
+        SMA -> Client: obtenirClientParId(contact.idClient)
+        activate Client
+        SMA <<-- Client: Client
+        deactivate Client
+
+        SMA -> Structure: obtenirAgentParId(contact.idAgence)
+        activate Structure
+        SMA <<-- Structure: Agent
+        deactivate Structure
+
+        SMA -> C: obtenirPropositionsContratParIdContact(idContact)
+        activate C
+        SMA <<-- C: Liste<PropositionContact>
+        deactivate C
+
+        loop propositionContrat: Liste<PropositionContact>
+        SMA -> Contrat: obtenirContratParId(propositionContrat.idContrat)
+        activate Contrat
+        SMA <<-- Contrat: Contrat
+        deactivate Contrat
+        end
+
+        SMA -> C: obtenirPropositionsOffreParIdContact(idContact)
+        activate C
+        SMA <<-- C: Liste<PropositionOffre>
+        deactivate C
+
+        loop propositionOffre: Liste<PropositionOffre>
+        SMA -> Produit: obtenirContratParId(propositionOffre.idOffre)
+        activate Produit
+        SMA <<-- Produit: Offre
+        deactivate Produit
+        end
+
+    IHM <<-- SMA: Contact, Client, Agent,\nListe<PropositionContrat, Contrat>\nListe<PropositionOffre, Offre>
+    deactivate SMA
+'Fin: Consulter un contact
+
+== Créer un contact ==
+
+'Créer un contact
+Agent -->> IHM: demandeCreationContact
+Agent <<-- IHM: demanderSelectionTypeContact
+Agent -->> IHM: selectionnerTypeContact
+    alt typeContact == contactCommercial
+        IHM -> SMA: creerContactCommercial(idAgent, idClient,\nmethodeContact, preferencesClient)
+        activate SMA
+            SMA -> C: creerContactCommercial(...)
+            activate C
+            SMA <<-- C: idContact
+            deactivate C
+        IHM <<-- SMA: idContact
+        deactivate SMA
+    else typeContact == contactSpontane
+        IHM -> SMA: creerContactSpontane(idClient,\nmethodeContact, idAgent)
+        activate SMA
+            SMA -> C: creerContactSpontane(...)
+            activate C
+            SMA <<-- C: idContact
+            deactivate C
+        IHM <<-- SMA: idContact
+        deactivate SMA
+    else typeContact == entretien
+        IHM -> SMA: creerContactEntretien(idContact,\nidAgent, idContactOrigine, horaire)
+        activate SMA
+            SMA -> C: creerContactEntretien(...)
+            activate C
+            SMA <<-- C: idContact
+            deactivate C
+        IHM <<-- SMA: idContact
+        deactivate SMA
+    end
+'Fin: Créer un contact
+
+== Mettre à jour un Contact ==
+
+'Mettre à jour un contact
+Agent -->> IHM: demandeMiseAJourContact
+    IHM -> SMA: consulterContact(idClient)
+    activate SMA
+        rnote over SMA: cf. consulterClient
+    IHM <<-- SMA: Contact, Client, Agent,\nListe<PropositionContrat, Contrat>\nListe<PropositionOffre, Offre>
+    deactivate SMA
+
+Agent -->> IHM: editerDonneesContact
+
+opt
+    Agent -->> IHM: demandeAjoutPropositionContrat
+        IHM -> SMA: listerContrats()
+        activate SMA
+            SMA -> Contrat: listerContrats()
+            activate Contrat
+            SMA <<-- Contrat: Liste<Contrat>
+            deactivate Contrat
+        IHM <<-- SMA: Liste<Contrat>
+        deactivate SMA
+    Agent <<-- IHM: demanderSelectionContrat
+    Agent -->> IHM: selectionContrat
+    Agent -->> IHM: saisieDesAnnotations
+    Agent -->> IHM: validerAjoutPropositionContrat
+        IHM -> SMA: ajouterPropositionContratAContact(idContact,\nPropositionContrat)
+        activate SMA
+            SMA -> C: ajouterPropositionContrat(idContact,\nPropositionContrat)
+            activate C
+            SMA <<-- C: idPropositionContrat
+            deactivate C
+        IHM <<-- SMA: idPropositionContrat
+        deactivate SMA
+end
+
+opt
+    Agent -->> IHM: demandeAjoutPropositionOffre
+        IHM -> SMA: listerOffres()
+        activate SMA
+            SMA -> Produit: listerOffres()
+            activate Produit
+            SMA <<-- Produit: Liste<Offre>
+            deactivate Produit
+        IHM <<-- SMA: Liste<Offre>
+        deactivate SMA
+    Agent <<-- IHM: demanderSelectionOffre
+    Agent -->> IHM: selectionOffre
+    Agent -->> IHM: saisieDesAnnotations
+    Agent -->> IHM: validerAjoutPropositionOffre
+        IHM -> SMA: ajouterPropositionOffreAContact(idContact,\nPropositionOffre)
+        activate SMA
+            SMA -> C: ajouterPropositionOffre(idContact,\nPropositionOffre)
+            activate C
+            SMA <<-- C: idPropositionContrat
+            deactivate C
+        IHM <<-- SMA: idPropositionContrat
+        deactivate SMA
+end
+
+@enduml
