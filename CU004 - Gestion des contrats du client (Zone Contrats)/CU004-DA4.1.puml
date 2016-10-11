@@ -1,0 +1,9 @@
+@startuml
+
+title DA4.1: Consulter contrats client\n
+
+:Rechercher Contrats Client;
+:Choisir contrat;
+:Consulter contrat;
+
+@enduml
