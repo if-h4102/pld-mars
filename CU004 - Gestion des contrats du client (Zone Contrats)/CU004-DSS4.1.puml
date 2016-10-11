@@ -8,22 +8,22 @@ participant Système
 
 
 A -> IHM : Rechercher contrat client\npar Code
-note left : Seulement dans l'hypothèse\n\
-où l'agent pourrait acquérir\n\
-le **codeSouscription** directement
-IHM -> Système : listerContratsClientsParCode(**idClient**, **codeSouscription**)
-Système --> IHM : //Souscription//, //Domaine//
+    note left : Seulement dans l'hypothèse\n\
+    où l'agent pourrait acquérir\n\
+    le **codeSouscription** directement
+    IHM -> Système : listerContratsClientsParCode(**idClient**, **codeSouscription**)
+    Système --> IHM : //Souscription//, //Domaine//
 
 
 A -> IHM : Rechercher tous les\ncontrats client
-note left : Sinon, on remplacera\n\
-l'étape précédente par celle-ci
-IHM -> Système : listerContratsClient(**idClient**)
-Système --> IHM : liste<//Souscription//, //Domaine//>
+    note left : Sinon, on remplacera\n\
+    l'étape précédente par celle-ci
+    IHM -> Système : listerContratsClient(**idClient**)
+    Système --> IHM : liste<//Souscription//, //Domaine//>
 
 
 A -> IHM : Consulter contrat client
-IHM -> Système : rechercherContrat(**idClient**, **codeSouscription**)
-Système --> IHM : //Contrat//, liste<//Option//>, //Souscription//, //Domaine//
+    IHM -> Système : rechercherContrat(**idClient**, **codeSouscription**)
+    Système --> IHM : //Contrat//, liste<//Option//>, //Souscription//, //Domaine//
 
 @enduml
