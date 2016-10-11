@@ -4,20 +4,18 @@
 
 La langue par défaut est le _français_.
 
-L'utilisation d'accents est conseillée.
+L'utilisation d'accents est déconseillée dans les noms de fonctions et
+diagrammes.
 
-### Exceptions
+Eviter `get`, `set`, etc. et leur préférer un équivalent comme lire,
+obtenir, récupérer, modifier, mettre à jour.
 
-Certains mots anglais sont à préférés au français:
-
-- get
-- set
-- id
-- by
+La veleur "`id` de `entitee`" se construit à la française: `idEntitee`.
+Exemple: `idClient`
 
 ### Exemples
 
-- `getPersonneById`
+- `obtenirAgentParIdClient`
 
 ## Noms de fichier
 
@@ -45,7 +43,8 @@ Pas besoin de s'assurer que c'est continu, mais l'unicité doit être préservé
 
 - Noms de fichiers: Casse mixte tolérée
   
-  **ATTENTION AUX CHANGEMENTS**
+  **ATTENTION AUX CHANGEMENTS DE CASSE**: Linux les supporte bien mais Windows
+  peut être perdu.
 
 - Entités: CapitalizedCamelCase
 
