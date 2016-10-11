@@ -35,7 +35,7 @@ Les diagrammes UML sont générés à partir de déclarations
 
 [Documentation](http://plantuml.com/command-line)
 
-Generate all:
+Generate all as SVG (default: PNG):
 
 ```shell
 plantuml -tsvg **/*.puml

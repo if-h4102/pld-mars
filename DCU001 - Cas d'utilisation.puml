@@ -1,0 +1,18 @@
+@startuml
+title Cas d'utilisation
+
+actor :Agent:
+
+rectangle Système {
+    usecase (Consulter le dossier client) as CU001
+    usecase (Gérer le client) as CU002
+    usecase (Gérer les contacts client) as CU003
+    usecase (Gérer les contrats du client) as CU004
+}
+
+Agent --> CU001
+Agent --> CU002
+Agent --> CU003
+Agent --> CU004
+
+@enduml
