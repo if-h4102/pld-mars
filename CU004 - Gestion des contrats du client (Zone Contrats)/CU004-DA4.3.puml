@@ -1,0 +1,11 @@
+@startuml
+
+title DA4.2: Résilier option\n
+
+:Rechercher Contrats Client;
+:Choisir contrat;
+:Lister options du contrat;
+:Choisir option;
+:Résilier option;
+
+@enduml
