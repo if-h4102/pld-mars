@@ -9,11 +9,11 @@ skinparam packageStyle rect
 top to bottom direction
 
 rectangle Système {
-usecase UC4.1 as "Consulter Contrats"
-usecase UC4.2 as "Souscrire option"
-usecase UC4.3 as "Résilier option"
-usecase UC4.4 as "Résilier contrat"
-usecase UC4.5 as "Choisir périodicité"
+    usecase UC4.1 as "Consulter Contrats"
+    usecase UC4.2 as "Souscrire option"
+    usecase UC4.3 as "Résilier option"
+    usecase UC4.4 as "Résilier contrat"
+    usecase UC4.5 as "Choisir périodicité"
 }
 
 A -> UC4.1
