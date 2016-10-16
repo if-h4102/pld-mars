@@ -1,0 +1,86 @@
+@startuml
+title DSS4.1: Consulter contrats client\n
+
+actor Agent as A
+participant IHM
+participant Systeme
+participant Contrat
+
+
+A -> IHM : Rechercher contrat client\npar Code
+    note left : Seulement dans l'hypothese\n\
+    où l'agent pourrait acquérir\n\
+    le **codeSouscription** directement
+    IHM -> Systeme : listerContratClientParCode(**idClient**, **codeSouscription**)
+        Systeme -> Contrat : trouverContratClientParCode(**codeSouscription**)
+        Contrat --> Systeme : //Souscription//
+        Systeme -> Contrat : trouverDomaineViaSouscription(**souscription**)
+        Contrat --> Systeme : //Domaine//
+    Systeme --> IHM : //Souscription//, //Domaine//
+
+
+A -> IHM : Rechercher tous les\ncontrats client
+    note left : Sinon, on remplacera\n\
+    l'étape précédente par celle-ci
+    IHM -> Systeme : listerContratsClient(**idClient**)
+        Systeme -> Contrat : trouverContratsParIdClient(**idClient**)
+        Contrat --> Systeme : liste<//Souscription//>
+        loop for each Souscription
+            Systeme -> Contrat : trouverDomaineViaSouscription(**souscription**)
+            Contrat --> Systeme : //Domaine//
+        end
+    Systeme --> IHM : liste<//Souscription//, //Domaine//>
+
+
+A -> IHM : Consulter contrat client
+    IHM -> Systeme : rechercherContratClient(**codeSouscription**)
+        Systeme -> Contrat : trouverContratClientParCode(**codeSouscription**)
+        Contrat --> Systeme : //Souscription//
+        Systeme -> Contrat : trouverDomaineViaSouscription(**souscription**)
+        Contrat --> Systeme : //Domaine//
+        Systeme -> Contrat : trouverContratViaSouscription(**codeSouscription**)
+        Contrat --> Systeme : //Contrat//
+        Systeme -> Contrat : trouverOptionsViaSouscription(**souscription**)
+        Contrat --> Systeme : liste<//Option//>
+    Systeme --> IHM : //Contrat//, liste<//Option//>, //Souscription//, //Domaine//
+
+A -> IHM : Detailler option
+    IHM -> Systeme : detaillerOption(**idOption**)
+        Systeme -> Contrat : trouverDetailsOption(**idOption**)
+        Contrat --> Systeme : //DetailsOption//
+    Systeme --> IHM : //Option//, //InfosOption//
+
+A -> IHM : Souscrire option
+    IHM -> Systeme : SouscrireOption(**codeSouscription**,**idOption** )
+        Systeme -> Contrat : ajouterOptionContratClient(**codeSouscription**, **idOption**)
+        Contrat --> Systeme : //Souscription//
+    Systeme --> IHM : //Souscription//
+
+A -> IHM : Souscrire option
+    IHM -> Systeme : resilierOption(**codeSouscription**,**idOption** )
+        Systeme -> Contrat : supprimerOptionContratClient(**codeSouscription**, **idOption**)
+        Contrat --> Systeme : //Souscription//
+    Systeme --> IHM : //Souscription//
+
+A -> IHM : Résilier contrat
+    IHM -> Systeme : resilierContratClient(**codeSouscription**)
+        Systeme -> Contrat : resilierContratClient(**codeSouscription**)
+        Contrat --> Systeme : //Confirmation//
+    Systeme --> IHM : //Confirmation//
+
+A -> IHM : Choisir périodicité
+    IHM -> Systeme : recupererCoutTotal(**codeSouscription**)
+        Systeme -> Contrat : trouverTarifSouscription(**codeSouscription**)
+        Contrat --> Systeme : //tarifBase//
+        loop pour chaque Option souscrite
+            Systeme -> Contrat : trouverTarifOption(**Option**)
+            Contrat --> Systeme : //tarifOption//
+        end
+        Systeme --> IHM : //coutTotal//
+    IHM -> IHM : calculMensualites(**coutTotal**, **periodicite**)
+    
+    IHM -> Systeme : choisirPeriodicite(**periodicite**, **codeSouscription**)
+        Systeme -> Contrat : modifierPeriodiciteContratClient(**codeSouscription**, **periodicite**)
+        Contrat --> Systeme : //Souscription//
+    Systeme --> IHM : //Souscription//
+@enduml
