@@ -1,0 +1,17 @@
+@startuml
+title DA4.1: Consulter contrats client\n
+
+:Rechercher Contrats Client;
+:Choisir contrat;
+:Consulter contrat;
+split
+:Details option;
+split again
+:Resilier option;
+split again
+:Souscrire option;
+split again
+:Choisir mensualite;
+:Valider mensualite;
+end split
+@enduml
