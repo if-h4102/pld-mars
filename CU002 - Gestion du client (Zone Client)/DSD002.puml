@@ -5,116 +5,118 @@ participant SMA as sma
 participant Client
 participant Personne
 
+==Recupération liste personne==
 activate Agent
 Agent -> ihm : selectionZoneClient
 activate ihm
-ihm -> sma : recupererListePersonne(idClient)
+ihm -> sma : recupererListePersonne(**idClient**)
 activate sma
-sma -> Client : recupererListePersonne(idClient)
+sma -> Client : recupererListePersonne(**idClient**)
 activate Client
-Client -->> sma : liste<idPersonne>
+Client -->> sma : //liste<idPersonne>//
 deactivate Client
-
-group pour chaque idPersonne
-    sma -> Personne : recupererPersonne(idPersonne)
+group pour chaque //idPersonne// de //List<idPersonne>//
+    sma -> Personne : recupererPersonne(**idPersonne**)
     activate Personne
-    Personne -->> sma : Personne, Adresse
+    Personne -->> sma : //Personne, Adresse//
     deactivate Personne
 end
+sma -->> ihm : //liste<Personne, Adresse>//
+deactivate sma
 
-sma -->> ihm : liste<Personne, Adresse>
+==Selection par défaut d'une personne==
+ihm -> sma : recupererPersonne(**idPersonne**)
+activate sma
+sma -> Personne : recupererPersonne(**idPersonne**)
+activate Personne
+Personne -->> sma : //Personne, Adresse//
+deactivate Personne
+sma -->> ihm : //Personne, Adresse//
+deactivate sma
+deactivate ihm
+====
+
+alt 1. Sélectionner une autre personne
+    Agent -> ihm : selectionPersonne
+    activate ihm
+    ihm -> sma : recupererPersonne(**idPersonne**)
+    activate sma
+    sma -> Personne : recupererPersonne(**idPersonne**)
+    activate Personne
+    Personne -->> sma : //Personne, Adresse//
+    deactivate Personne
+    sma -->> ihm : //Personne, Adresse//
+    deactivate sma
+    deactivate ihm
+end
+
+alt 2. Mettre à jour / retirer une personne 
+    Agent -> ihm : MAJInformationPersonne
+    activate ihm
+    ihm -> sma : MAJInformationPersonne(**Personne, Adresse**)
+    activate sma
+    sma -> Personne : MAJInformationPersonne(**Personne, Adresse**)
+    activate Personne
+    deactivate Personne
+    deactivate sma
+    deactivate ihm
+else
+    Agent -> ihm : retirerPersonne
+    activate ihm
+    ihm -> sma : retirerPersonne(**idPersonne**)
+    activate sma
+    sma -> Personne : retirerPersonne(**idPersonne**)
+    activate Personne
+    deactivate Personne
+    deactivate sma
+    deactivate ihm
+end
+
+==Ajouter une personne==
+Agent -> ihm : ajouterPersonne
+activate ihm
+deactivate ihm
+
+Agent -> ihm : rechercherPersonneParNom
+activate ihm
+ihm -> sma : rechercherPersonneParNom(**nom**)
+activate sma
+sma -> Personne : rechercherPersonneParNom(**nom**)
+activate Personne
+Personne -->> sma : //liste<Personne, Adresse>//
+deactivate Personne
+sma -->> ihm : //liste<Personne, Adresse>//
 deactivate sma
 deactivate ihm
 
-alt
-    Agent -> ihm : consulterInformationsPersonne
+alt 3. Ajouter personne trouvée / Créer nouvelle personne
+    Agent -> ihm : selectionnerPersonne
     activate ihm
-    ihm -> sma : recupererPersonne(idPersonne)
-    activate sma
-    sma -> Personne : recupererPersonne(idPersonne)
-    activate Personne
-    Personne -->> sma : Personne, Adresse
-    deactivate Personne
-    sma -->> ihm : Personne, Adresse
-    deactivate sma
     deactivate ihm
-    
-    alt
-        Agent -> ihm : MAJInformationPersonne
-        activate ihm
-        ihm -> sma : MAJInformationPersonne(Personne, Adresse)
-        activate sma
-        sma -> Personne : MAJInformationPersonne(Personne, Adresse)
-        activate Personne
-        deactivate Personne
-        deactivate sma
-        deactivate ihm
-    else
-        Agent -> ihm : supprimerPersonne
-        activate ihm
-        ihm -> sma : supprimerPersonne(idPersonne)
-        activate sma
-        sma -> Personne : supprimerPersonne(idPersonne)
-        activate Personne
-        deactivate Personne
-        deactivate sma
-        deactivate ihm
-    end
-else
     Agent -> ihm : ajouterPersonne
     activate ihm
+    ihm -> sma : ajouterPersonne(**idClient, idPersonne**)
+    activate sma
+    sma -> Client : ajouterPersonne(**idClient, idPersonne**)
+    activate Client
+    deactivate Client
+    deactivate sma
     deactivate ihm
-    alt
-        Agent -> ihm : rechercherPersonneParNom
-        activate ihm
-        ihm -> sma : rechercherPersonneParNom(nom)
-        activate sma
-        sma -> Personne : rechercherPersonneParNom(nom)
-        activate Personne
-        Personne -->> sma : liste<Personne, Adresse>
-        deactivate Personne
-        sma -->> ihm : liste<Personne, Adresse>
-        deactivate sma
-        deactivate ihm
-        alt
-            Agent -> ihm : selectionnerPersonne
-            activate ihm
-            ihm -> sma : ajouterPersonne(idClient, idPersonne)
-            activate sma
-            sma -> Client : ajouterPersonne(idClient, idPersonne)
-            activate Client
-            deactivate Client
-            deactivate sma
-            deactivate ihm
-        else
-            Agent -> ihm : creerPersonne
-            activate ihm
-            ihm -> sma : creerAjouterPersonne(Adresse, Personne, idClient)
-            activate sma
-            sma -> Personne : creerPersonneAdresse(Personne, Adresse)
-            activate Personne
-            deactivate Personne
-            sma -> Client : ajouterPersonne(idClient, idPersonne)
-            activate Client
-            deactivate Client
-            deactivate sma
-            deactivate ihm
-        end
-    else
-        Agent -> ihm : creerPersonne
-        activate ihm
-        ihm -> sma : creerAjouterPersonne(Adresse, Personne, idClient)
-        activate sma
-        sma -> Personne : creerPersonneAdresse(Personne, Adresse)
-        activate Personne
-        deactivate Personne
-        sma -> Client : ajouterPersonne(idClient, idPersonne)
-        activate Client
-        deactivate Client
-        deactivate sma
-        deactivate ihm
-    end
+else
+    Agent -> ihm : creerPersonne
+    activate ihm
+    ihm -> sma : creerAjouterPersonne(**Adresse, Personne, idClient**)
+    activate sma
+    sma -> Personne : creerPersonneAdresse(**Personne, Adresse**)
+    activate Personne
+    Personne -->> sma : //idPersonne//
+    deactivate Personne
+    sma -> Client : ajouterPersonne(**idClient, idPersonne**)
+    activate Client
+    deactivate Client
+    deactivate sma
+    deactivate ihm
 end
-deactivate Agent
 
+deactivate Agent
 @enduml
