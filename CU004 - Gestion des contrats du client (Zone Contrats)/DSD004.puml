@@ -9,7 +9,7 @@ participant Contrat
 
 A -> IHM : Rechercher contrat client\npar Code
     note left : Seulement dans l'hypothese\n\
-    o� l'agent pourrait acqu�rir\n\
+    où l'agent pourrait acquérir\n\
     le **codeSouscription** directement
     IHM -> Systeme : listerContratClientParCode(**idClient**, **codeSouscription**)
         Systeme -> Contrat : trouverContratClientParCode(**codeSouscription**)
@@ -21,7 +21,7 @@ A -> IHM : Rechercher contrat client\npar Code
 
 A -> IHM : Rechercher tous les\ncontrats client
     note left : Sinon, on remplacera\n\
-    l'�tape pr�c�dente par celle-ci
+    l'étape précédente par celle-ci
     IHM -> Systeme : listerContratsClient(**idClient**)
         Systeme -> Contrat : trouverContratsParIdClient(**idClient**)
         Contrat --> Systeme : liste<//Souscription//>
@@ -62,13 +62,13 @@ A -> IHM : Souscrire option
         Contrat --> Systeme : //Souscription//
     Systeme --> IHM : //Souscription//
 
-A -> IHM : R�silier contrat
+A -> IHM : Résilier contrat
     IHM -> Systeme : resilierContratClient(**codeSouscription**)
         Systeme -> Contrat : resilierContratClient(**codeSouscription**)
         Contrat --> Systeme : //Confirmation//
     Systeme --> IHM : //Confirmation//
 
-A -> IHM : Choisir p�riodicit�
+A -> IHM : Choisir périodicité
     IHM -> Systeme : recupererCoutTotal(**codeSouscription**)
         Systeme -> Contrat : trouverTarifSouscription(**codeSouscription**)
         Contrat --> Systeme : //tarifBase//

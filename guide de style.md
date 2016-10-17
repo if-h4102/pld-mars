@@ -60,4 +60,28 @@ Pas besoin de s'assurer que c'est continu, mais l'unicité doit être préservé
   
 ## Spécificités par type de document
 
-### 
+### DSD
+
+
+
+- Utiliser les noms `Interface` et `Services Métier Applicatifs`
+
+- Les interactions etre `Agent` et `Interface` ne vont que dans le sens depuis
+  l'agent vers l'interface.
+
+- Pour les types de retour, séparer les clés étrangères de l'entité qui les
+  utilise. Exemple: `getClientEtIdAgence(idClient)` retourne
+  `Client, idAgence`.
+
+- Mettre les arguments en gras (`**variable**`) et les retours en
+  italique (`//variable//`)
+
+- Noter les listes `Liste<var1, var2>`
+
+- Pour les itérations, utiliser:
+
+  ```puml
+  group Pour chaque **idPersonne** de **Liste<idPersonne>**
+      ...
+  end
+  ```
