@@ -60,4 +60,11 @@ Pas besoin de s'assurer que c'est continu, mais l'unicité doit être préservé
   
 ## Spécificités par type de document
 
-### 
+### DSD
+
+- Les interactions etre `Agent` et `Interface` ne vont que dans le sens depuis
+  l'agent vers l'interface.
+
+- Pour les types de retour, séparer les clés étrangères de l'entité qui les
+  utilise. Exemple: `getClientEtIdAgence(idClient)` retourne
+  `Client, idAgence`.
