@@ -4,6 +4,7 @@ participant IHM as ihm
 participant SMA as sma
 participant Client
 participant Personne
+participant Structure
 
 ==Recupération liste personne==
 activate Agent
@@ -25,26 +26,40 @@ sma -->> ihm : //liste<Personne, Adresse>//
 deactivate sma
 
 ==Selection par défaut d'une personne==
-ihm -> sma : recupererPersonne(**idPersonne**)
+ihm -> sma : recupererPersonne(**idClient, idPersonne**)
 activate sma
 sma -> Personne : recupererPersonne(**idPersonne**)
 activate Personne
 Personne -->> sma : //Personne, Adresse//
 deactivate Personne
+sma -> Client : recupererAgentDerniereModification(**idClient, idPersone**)
+activate Client
+Client -->> sma : //idAgent, Date//
+deactivate Client
+sma -> Structure : recupererAgent(**idAgent**)
+activate Structure
+Structure -->> sma : //Agent//
+deactivate Structure
 sma -->> ihm : //Personne, Adresse//
 deactivate sma
 deactivate ihm
 ====
 
 alt 1. Sélectionner une autre personne
-    Agent -> ihm : selectionPersonne
-    activate ihm
-    ihm -> sma : recupererPersonne(**idPersonne**)
+    ihm -> sma : recupererPersonne(**idClient, idPersonne**)
     activate sma
     sma -> Personne : recupererPersonne(**idPersonne**)
     activate Personne
     Personne -->> sma : //Personne, Adresse//
     deactivate Personne
+    sma -> Client : recupererAgentDerniereModification(**idClient, idPersone**)
+    activate Client
+    Client -->> sma : //idAgent, Date//
+    deactivate Client
+    sma -> Structure : recupererAgent(**idAgent**)
+    activate Structure
+    Structure -->> sma : //Agent//
+    deactivate Structure
     sma -->> ihm : //Personne, Adresse//
     deactivate sma
     deactivate ihm
@@ -58,6 +73,9 @@ alt 2. Mettre à jour / retirer une personne
     sma -> Personne : MAJInformationPersonne(**Personne, Adresse**)
     activate Personne
     deactivate Personne
+    sma -> Client : MAJAgentDerniereModification(**idClient, idPersonne, idAgent, Date**)
+    activate Client
+    deactivate Client
     deactivate sma
     deactivate ihm
 else
@@ -97,7 +115,7 @@ alt 3. Ajouter personne trouvée / Créer nouvelle personne
     activate ihm
     ihm -> sma : ajouterPersonne(**idClient, idPersonne**)
     activate sma
-    sma -> Client : ajouterPersonne(**idClient, idPersonne**)
+    sma -> Client : ajouterPersonne(**idClient, idPersonne, idAgent, Date**)
     activate Client
     deactivate Client
     deactivate sma
@@ -111,7 +129,7 @@ else
     activate Personne
     Personne -->> sma : //idPersonne//
     deactivate Personne
-    sma -> Client : ajouterPersonne(**idClient, idPersonne**)
+    sma -> Client : ajouterPersonne(**idClient, idPersonne, , idAgent, Date**)
     activate Client
     deactivate Client
     deactivate sma
