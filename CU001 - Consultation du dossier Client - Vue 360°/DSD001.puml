@@ -1,0 +1,53 @@
+@startuml
+title DSA003 - Gestion des contacts
+
+actor Agent
+participant Interface as IHM
+participant "Services\nMétier\nApplicatifs" as SMA
+participant Contact as C
+participant Client
+participant Structure
+participant Contrat
+participant Produit
+
+
+== Consulter dossier client ==
+
+'Lister les contacts d'un client
+Agent -->> IHM: consulterDossierClient
+    IHM -> SMA: consulterDossierClient(**idClient**)
+    activate SMA
+        SMA -> C: obtenirDonneesVue360(**idClient**)
+        activate C
+        SMA <<-- C: //Client, Liste<Contact, idAgent>, Liste<idPersonne>//
+        deactivate C
+
+        group Pour chaque //idAgent// de //Liste<Contact, idAgent>//
+            SMA -> Structure: obtenirAgentParId(**idAgent**)
+            activate Structure
+            SMA <<-- Structure: //Agent//
+            deactivate Structure
+        end
+
+        group pour chaque //idPersonne// de //Liste<idPersonne>//
+           SMA -> Personne: recupererPersonne(**idPersonne**)
+           activate Personne
+           SMA <<-- Personne: //Personne, Adresse//
+           deactivate Personne
+        end
+
+        SMA -> Contrat: obtenirDerniereSouscriptionParIdClient(**idClient**)
+        activate Contrat
+        SMA <<-- Contrat: //Souscription, Contrat, Domaine//
+        deactivate Contrat
+
+        SMA -> Contrat: compterSouscriptionsParDomaine(**idClient**)
+        activate Contrat
+        SMA <<-- Contrat: //totalSouscriptions, Liste<Domaine, quantité>//
+        deactivate Contrat
+
+    IHM <<-- SMA: //Client, Liste<Contact, Agent>, Liste<Personne>//\n//Souscription, Contrat, Domaine, totalSouscriptions,//\n//Liste<Domaine, quantité>//
+    deactivate SMA
+'Fin: Lister les contacts du client
+
+@enduml

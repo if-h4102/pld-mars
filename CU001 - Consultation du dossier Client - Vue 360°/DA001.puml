@@ -1,19 +1,13 @@
 @startuml
-title DA1: Vue client 360
+title DA1: Vue client 360\n
 :Consulter dossier client;
 
-	split
-		:Rechercher contrat client;
-	split again
-		:Detailler dernier contrat client;
-	split again
-		:Consulter un contact;
-	split again
-		:Creer contact;
-	split again
-		:Consulter information personne;
-	split again
-		:Consulter liste contacts client;
-	end split
+split
+    :Gérer les contrats;
+split again
+    :Gérer contacts;
+split again
+    :Gérer les personnes;
+end split
 
 @enduml
