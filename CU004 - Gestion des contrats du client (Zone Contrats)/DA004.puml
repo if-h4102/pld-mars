@@ -16,7 +16,7 @@ split again
 	split again 
 	:Lister les contrat par domaine;
 	end split
-	:Créer un contrat client;
+	:Souscrire à un contrat client;
 end split
 split again 
 :Rechercher dernier contrat client;
@@ -31,5 +31,7 @@ end split
 	split again
 		:Choisir periodicite;
 		:Valider periodicite;
+	split again 
+		:Résilier contrat;
 	end split
 @enduml
