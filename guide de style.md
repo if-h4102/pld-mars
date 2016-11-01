@@ -81,7 +81,7 @@ Pas besoin de s'assurer que c'est continu, mais l'unicité doit être préservé
 - Pour les itérations, utiliser:
 
   ```puml
-  group Pour chaque **idPersonne** de **Liste<idPersonne>**
+  group Pour chaque //idPersonne// de //Liste<idPersonne>//
       ...
   end
   ```
