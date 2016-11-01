@@ -5,18 +5,18 @@ split
 
 split
 	split
-		:Lister tous les contrats client;
+		:Lister tous les contrats client souscris;
 	split again
-		:Lister les contrats client par domaine;
+		:Lister les contrats client souscris par domaine;
 	end split
 	:Choisir contrat;
 split again
 	split
-	:Lister tous les contrats possibles;
+	:Lister tous les contrats non souscris;
 	split again 
-	:Lister les contrat par domaine;
+	:Lister les contrats non souscris par domaine;
 	end split
-	:Souscrire à un contrat client;
+	:Créer nouveau contrat client;
 end split
 split again 
 :Rechercher dernier contrat client;
