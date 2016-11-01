@@ -1,0 +1,21 @@
+@startuml
+title DA2: Gérer les personnes\n
+
+:Consulter liste personnes;
+split
+    :Consulter informations personne;
+    split
+        :Mise à jour informations personne;
+    split again
+        :Retirer personne du client;
+    end split
+split again
+    :Ajouter personne;
+    split
+        :Rechercher personne par nom;
+    split again
+        :Crééer personne;
+    end split
+end split
+
+@enduml
