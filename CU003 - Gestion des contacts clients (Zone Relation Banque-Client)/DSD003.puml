@@ -43,31 +43,31 @@ Agent -->> IHM: demandeConsultationContact
         SMA <<-- C: //Contact, idClient, idAgent,//\n//Liste<PropositionContrat, idContrat>,//\n//Liste<PropositionOffre, idOffre>//
         deactivate C
 
-        SMA -> Client: obtenirClientParId(idClient)
+        SMA -> Client: obtenirClientParId(**idClient**)
         activate Client
-        SMA <<-- Client: Client
+        SMA <<-- Client: //Client//
         deactivate Client
 
-        SMA -> Structure: obtenirAgentParId(idAgent)
+        SMA -> Structure: obtenirAgentParId(**idAgent**)
         activate Structure
-        SMA <<-- Structure: Agent
+        SMA <<-- Structure: //Agent//
         deactivate Structure
 
-        loop idContrat: Liste<PropositionContrat, idContrat>
+        group Pour chaque //idContrat// de //Liste<PropositionContrat, idContrat>//
             SMA -> Contrat: obtenirContratParId(idContrat)
             activate Contrat
-            SMA <<-- Contrat: Contrat
+            SMA <<-- Contrat: //Contrat//
             deactivate Contrat
         end
 
-        loop idOffre: Liste<PropositionOffre, idOffre>
-            SMA -> Produit: obtenirContratParId(idOffre)
+        group Pour chaque //idOffre// de //Liste<PropositionOffre, idOffre>//
+            SMA -> Produit: obtenirContratParId(**idOffre**)
             activate Produit
-            SMA <<-- Produit: Offre
+            SMA <<-- Produit: //Offre//
             deactivate Produit
         end
 
-    IHM <<-- SMA: Contact, Client, Agent,\nListe<PropositionContrat, Contrat>\nListe<PropositionOffre, Offre>
+    IHM <<-- SMA: //Contact, Client, Agent,//\n//Liste<PropositionContrat, Contrat>//\n//Liste<PropositionOffre, Offre>//
     deactivate SMA
 'Fin: Consulter un contact
 
@@ -78,13 +78,22 @@ Agent -->> IHM: saisirDonnees
 
 opt
     Agent -->> IHM: listerContrats
-        IHM -> SMA: listerContrats()
+        IHM -> SMA: listerDomainesContrat()
         activate SMA
-            SMA -> Contrat: listerContrats()
+            SMA -> Contrat: listerDomainesContrat()
             activate Contrat
-            SMA <<-- Contrat: Liste<Contrat>
+            SMA <<-- Contrat: //Liste<DomaineContrat>//
             deactivate Contrat
-        IHM <<-- SMA: Liste<Contrat>
+        IHM <<-- SMA: //Liste<Contrat>//
+        deactivate SMA
+    Agent -->> IHM: sélectionnerDomaine
+        IHM -> SMA: listerContratsParDomaine(**idDomaineContrat**)
+        activate SMA
+            SMA -> Contrat: listerContratsParDomaine(**idDomaineContrat**)
+            activate Contrat
+            SMA <<-- Contrat: //Liste<Contrat>//
+            deactivate Contrat
+        IHM <<-- SMA: //Liste<Contrat>//
         deactivate SMA
     Agent -->> IHM: selectionnerContrat
     Agent -->> IHM: saisirAnnotations
@@ -96,22 +105,22 @@ opt
         activate SMA
             SMA -> Produit: listerOffres()
             activate Produit
-            SMA <<-- Produit: Liste<Offre>
+            SMA <<-- Produit: //Liste<Offre>//
             deactivate Produit
-        IHM <<-- SMA: Liste<Offre>
+        IHM <<-- SMA: //Liste<Offre>//
         deactivate SMA
     Agent -->> IHM: selectionnerOffre
     Agent -->> IHM: saisirAnnotations
 end
 
 Agent -->> IHM: creerContact
-    IHM -> SMA: creerContact(Contact, idClient, idAgent, idContactOrigine,\nListe<PropositionContrat, idContrat>,\nListe<PropositionOffre, idOffre>)
+    IHM -> SMA: creerContact(**Contact, idClient, idAgent, idContactOrigine,**\n**Liste<PropositionContrat, idContrat>,**\n**Liste<PropositionOffre, idOffre>**)
     activate SMA
-        SMA -> C: creerContact(Contact, idClient, idAgent, idContactOrigine,\nListe<PropositionContrat, idContrat>,\nListe<PropositionOffre, idOffre>)
+        SMA -> C: creerContact(**Contact, idClient, idAgent, idContactOrigine**,\n**Liste<PropositionContrat, idContrat>,**\n**Liste<PropositionOffre, idOffre>**)
         activate C
-        SMA <<-- C: idContact
+        SMA <<-- C: //idContact//
         deactivate C
-    IHM <<-- SMA: idContact
+    IHM <<-- SMA: //idContact//
     deactivate SMA
 
 'Fin: Créer un contact
@@ -123,13 +132,22 @@ Agent -->> IHM: editerDonneesContact
 
 opt
     Agent -->> IHM: listerContrats
-        IHM -> SMA: listerContrats()
+        IHM -> SMA: listerDomainesContrat()
         activate SMA
-            SMA -> Contrat: listerContrats()
+            SMA -> Contrat: listerDomainesContrat()
             activate Contrat
-            SMA <<-- Contrat: Liste<Contrat>
+            SMA <<-- Contrat: //Liste<DomaineContrat>//
             deactivate Contrat
-        IHM <<-- SMA: Liste<Contrat>
+        IHM <<-- SMA: //Liste<Contrat>//
+        deactivate SMA
+    Agent -->> IHM: sélectionnerDomaine
+        IHM -> SMA: listerContratsParDomaine(**idDomaineContrat**)
+        activate SMA
+            SMA -> Contrat: listerContratsParDomaine(**idDomaineContrat**)
+            activate Contrat
+            SMA <<-- Contrat: //Liste<Contrat>//
+            deactivate Contrat
+        IHM <<-- SMA: //Liste<Contrat>//
         deactivate SMA
     Agent -->> IHM: selectionnerContrat
     Agent -->> IHM: saisirAnnotations
@@ -150,9 +168,9 @@ opt
 end
 
 Agent -->> IHM: appliquerModifications
-    IHM -> SMA: mettreAJourContact(Contact, idAgent, idContactOrigine,\nListe<PropositionContrat, idContrat>,\nListe<PropositionOffre, idOffre>)
+    IHM -> SMA: mettreAJourContact(**Contact, idAgent, idContactOrigine,**\n**Liste<PropositionContrat, idContrat>,**\n**Liste<PropositionOffre, idOffre>**)
     activate SMA
-        SMA -> C: mettreAJourContact(Contact, idAgent,  idContactOrigine,\nListe<PropositionContrat, idContrat>,\nListe<PropositionOffre, idOffre>)
+        SMA -> C: mettreAJourContact(**Contact, idAgent,  idContactOrigine,**\n**Liste<PropositionContrat, idContrat>,**\n**Liste<PropositionOffre, idOffre>**)
         activate C
         SMA <<-- C
         deactivate C

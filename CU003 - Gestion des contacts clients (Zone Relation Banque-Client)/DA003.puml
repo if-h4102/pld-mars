@@ -1,11 +1,13 @@
 @startuml
-title DA003 - Gestion des contacts
+title DA3: Gérer les contacts\n
 
-(*) --> "Lister les contacts du client" as listClient
 
-listClient --> "Consulter un contact" as consulter
-listClient --> "Créer un contact" as creer_contact
-
-consulter --> "Modifier les données d'un contact" as modifier
+:Lister les contacts du client;
+split
+    :Consulter un contact;
+    :Modifier les données d'un contact;
+split again
+    :Créer un contact;
+end split
 
 @enduml
