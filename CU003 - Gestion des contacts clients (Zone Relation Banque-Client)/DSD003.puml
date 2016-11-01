@@ -87,9 +87,9 @@ opt
         IHM <<-- SMA: //Liste<Contrat>//
         deactivate SMA
     Agent -->> IHM: sélectionnerDomaine
-        IHM -> SMA: listerContratsParDomaine(**idDomaineContrat**)
+        IHM -> SMA: listerContratsDomaine(**idDomaineContrat**)
         activate SMA
-            SMA -> Contrat: listerContratsParDomaine(**idDomaineContrat**)
+            SMA -> Contrat: listerContratsDomaine(**idDomaineContrat**)
             activate Contrat
             SMA <<-- Contrat: //Liste<Contrat>//
             deactivate Contrat
@@ -141,9 +141,9 @@ opt
         IHM <<-- SMA: //Liste<Contrat>//
         deactivate SMA
     Agent -->> IHM: sélectionnerDomaine
-        IHM -> SMA: listerContratsParDomaine(**idDomaineContrat**)
+        IHM -> SMA: listerContratsDomaine(**idDomaineContrat**)
         activate SMA
-            SMA -> Contrat: listerContratsParDomaine(**idDomaineContrat**)
+            SMA -> Contrat: listerContratsDomaine(**idDomaineContrat**)
             activate Contrat
             SMA <<-- Contrat: //Liste<Contrat>//
             deactivate Contrat
