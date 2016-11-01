@@ -3,21 +3,14 @@ title DA4: Consulter contrats client\n
 split
 :Rechercher contrat client;
 
-split
+
+	:Lister tous les contrats client;
 	split
-		:Lister tous les contrats client souscris;
-	split again
-		:Lister les contrats client souscris par domaine;
-	end split
 	:Choisir contrat;
-split again
-	split
-	:Lister tous les contrats non souscris;
-	split again 
-	:Lister les contrats non souscris par domaine;
-	end split
+	split again
 	:Créer nouveau contrat client;
-end split
+	end split
+
 split again 
 :Rechercher dernier contrat client;
 end split
