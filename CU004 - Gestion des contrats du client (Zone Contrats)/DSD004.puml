@@ -1,86 +1,220 @@
 @startuml
-title DSS4.1: Consulter contrats client\n
+title DSD4.1: Consulter contrats client\n
 
 actor Agent as A
 participant IHM
 participant Systeme
 participant Contrat
 
+==Rechercher Contrat Client==
+activate A
+A -> IHM : Compter les\ncontrats client
+activate IHM
+    IHM -> Systeme : listerContratsClient(**idClient**)
+    activate Systeme
+        Systeme -> Contrat : trouverContratsParIdClient(**idClient**)
+        activate Contrat
+        Contrat --> Systeme : liste<//Souscription//>
+    	deactivate Contrat
+        loop pour chaque Souscription
+            Systeme -> Contrat : trouverDomaineViaSouscription(**souscription**)
+            activate Contrat
+            Contrat --> Systeme : //Domaine//
+    		deactivate Contrat
+        end
+    Systeme --> IHM : liste<//Domaine//, //Integer//>
+    deactivate Systeme
+    
+A -> IHM : Rechercher dernier \ncontrat client 
 
-A -> IHM : Rechercher contrat client\npar Code
-    note left : Seulement dans l'hypothese\n\
-    où l'agent pourrait acquérir\n\
-    le **codeSouscription** directement
-    IHM -> Systeme : listerContratClientParCode(**idClient**, **codeSouscription**)
-        Systeme -> Contrat : trouverContratClientParCode(**codeSouscription**)
+    IHM -> Systeme : RechercherDernierContratClient(**idClient**)
+    activate Systeme
+        Systeme -> Contrat : trouverDernierContratParIdClient(**idClient**)
+        activate Contrat
         Contrat --> Systeme : //Souscription//
+    	deactivate Contrat
         Systeme -> Contrat : trouverDomaineViaSouscription(**souscription**)
+        activate Contrat
         Contrat --> Systeme : //Domaine//
-    Systeme --> IHM : //Souscription//, //Domaine//
-
+    	deactivate Contrat
+    Systeme --> IHM : //Souscription//,//Domaine//
+    deactivate Systeme
 
 A -> IHM : Rechercher tous les\ncontrats client
-    note left : Sinon, on remplacera\n\
-    l'étape précédente par celle-ci
     IHM -> Systeme : listerContratsClient(**idClient**)
+    activate Systeme
         Systeme -> Contrat : trouverContratsParIdClient(**idClient**)
+        activate Contrat
         Contrat --> Systeme : liste<//Souscription//>
-        loop for each Souscription
+    	deactivate Contrat
+        loop pour chaque Souscription
             Systeme -> Contrat : trouverDomaineViaSouscription(**souscription**)
+            activate Contrat
             Contrat --> Systeme : //Domaine//
+    		deactivate Contrat
+            Systeme -> Contrat : trouverContratViaSouscription(**souscription**)
+            activate Contrat
+            Contrat --> Systeme : //Contrat//
+    		deactivate Contrat
         end
-    Systeme --> IHM : liste<//Souscription//, //Domaine//>
-
-
-A -> IHM : Consulter contrat client
-    IHM -> Systeme : rechercherContratClient(**codeSouscription**)
-        Systeme -> Contrat : trouverContratClientParCode(**codeSouscription**)
+    Systeme --> IHM : liste<//Souscription//, //Domaine//, //Contrat//>
+    deactivate Systeme
+    
+    
+A -> IHM : Rechercher tous les\ncontrats client d'un domaine
+    IHM -> Systeme : listerContratsClientParDomaine(**idClient**,**Domaine**)
+    activate Systeme
+        Systeme -> Contrat : trouverContratsParIdClientEtDomaine(**idClient**,**Domaine**)
+        activate Contrat
+        Contrat --> Systeme : liste<//Souscription//>
+    	deactivate Contrat
+        loop pour chaque Souscription
+            Systeme -> Contrat : trouverContratViaSouscription(**souscription**)
+            activate Contrat
+            Contrat --> Systeme : //Contrat//
+    		deactivate Contrat
+        end
+    Systeme --> IHM : liste<//Souscription//, //Contrat//>
+    deactivate Systeme
+deactivate IHM
+    
+==Créer un contrat client==
+A -> IHM : Lister les contrats possibles
+    IHM -> Systeme : listerContrats()
+    activate Systeme
+        Systeme -> Contrat : trouverContrat()
+        activate Contrat
+        Contrat --> Systeme : liste<//Contrat//>
+        deactivate Contrat
+    Systeme --> IHM : liste<//Contrat//>
+    deactivate Systeme
+    
+A -> IHM : Lister les contrats possibles d'un domaine
+    IHM -> Systeme : listerContratsDomaine(**Domaine**)
+    activate Systeme
+        Systeme -> Contrat : trouverContratDomaine(**Domaine**)
+        activate Contrat
+        Contrat --> Systeme : liste<//Contrat//>
+        deactivate Contrat
+    Systeme --> IHM : liste<//Contrat//>
+    deactivate Systeme
+    
+A -> IHM : Créer un \ncontrat client
+    IHM -> Systeme : choisirContrat(**idContrat**,**idClient**)
+    activate Systeme
+        Systeme -> Contrat : creerContrat(**idContrat**, **idclient**)
+        activate Contrat
         Contrat --> Systeme : //Souscription//
-        Systeme -> Contrat : trouverDomaineViaSouscription(**souscription**)
+        deactivate Contrat
+    Systeme --> IHM : //Souscription//
+    deactivate Systeme
+    deactivate IHM
+====
+
+==Consulter contrat client==
+A -> IHM : Consulter contrat client
+activate IHM
+    IHM -> Systeme : rechercherContratClient(**codeSouscription**)
+    activate Systeme
+    	Systeme -> Contrat : trouverContratClientParCode(**codeSouscription**)
+    	activate Contrat
+        Contrat --> Systeme : //Souscription//
+    	deactivate Contrat
+    	Systeme -> Contrat : trouverDomaineViaSouscription(**souscription**)
+    	activate Contrat
         Contrat --> Systeme : //Domaine//
-        Systeme -> Contrat : trouverContratViaSouscription(**codeSouscription**)
+    	deactivate Contrat
+    	Systeme -> Contrat : trouverContratViaSouscription(**souscription**)
+    	activate Contrat
         Contrat --> Systeme : //Contrat//
-        Systeme -> Contrat : trouverOptionsViaSouscription(**souscription**)
+    	deactivate Contrat
+    	Systeme -> Contrat : trouverOptionsViaSouscription(**souscription**)
+    	activate Contrat
         Contrat --> Systeme : liste<//Option//>
+    	deactivate Contrat
+   
     Systeme --> IHM : //Contrat//, liste<//Option//>, //Souscription//, //Domaine//
+    deactivate Systeme
 
-A -> IHM : Detailler option
-    IHM -> Systeme : detaillerOption(**idOption**)
-        Systeme -> Contrat : trouverDetailsOption(**idOption**)
+alt
+	A -> IHM : Detailler option
+	IHM -> Systeme : detaillerOption(**idOption**)
+	activate Systeme
+    	Systeme -> Contrat : trouverDetailsOption(**idOption**)
+    	activate Contrat
         Contrat --> Systeme : //DetailsOption//
+    	deactivate Contrat
     Systeme --> IHM : //Option//, //InfosOption//
+    deactivate Systeme
+end
 
+alt
 A -> IHM : Souscrire option
     IHM -> Systeme : SouscrireOption(**codeSouscription**,**idOption** )
+    activate Systeme
         Systeme -> Contrat : ajouterOptionContratClient(**codeSouscription**, **idOption**)
+        activate Contrat
         Contrat --> Systeme : //Souscription//
+    deactivate Contrat
     Systeme --> IHM : //Souscription//
+    deactivate Systeme
+end
 
-A -> IHM : Souscrire option
+alt
+A -> IHM : Resilier option
     IHM -> Systeme : resilierOption(**codeSouscription**,**idOption** )
+    activate Systeme
         Systeme -> Contrat : supprimerOptionContratClient(**codeSouscription**, **idOption**)
+        activate Contrat
         Contrat --> Systeme : //Souscription//
+    deactivate Contrat
     Systeme --> IHM : //Souscription//
+    deactivate Systeme
+end
 
-A -> IHM : Résilier contrat
+alt
+A -> IHM : Resilier contrat
     IHM -> Systeme : resilierContratClient(**codeSouscription**)
+    activate Systeme
         Systeme -> Contrat : resilierContratClient(**codeSouscription**)
+        activate Contrat
         Contrat --> Systeme : //Confirmation//
+    deactivate Contrat
     Systeme --> IHM : //Confirmation//
-
-A -> IHM : Choisir périodicité
+    deactivate Systeme
+end
+alt
+A -> IHM : Choisir periodicite
     IHM -> Systeme : recupererCoutTotal(**codeSouscription**)
+    activate Systeme
         Systeme -> Contrat : trouverTarifSouscription(**codeSouscription**)
+        activate Contrat
         Contrat --> Systeme : //tarifBase//
+    	deactivate Contrat
+        Systeme -> Contrat : trouverOptionsViaSouscription(**souscription**)
+        activate Contrat
+        Contrat --> Systeme : liste<//Option//>
+    	deactivate Contrat
         loop pour chaque Option souscrite
             Systeme -> Contrat : trouverTarifOption(**Option**)
+            activate Contrat
             Contrat --> Systeme : //tarifOption//
+    		deactivate Contrat
         end
         Systeme --> IHM : //coutTotal//
+        deactivate Systeme
     IHM -> IHM : calculMensualites(**coutTotal**, **periodicite**)
-    
+A -> IHM : Valider periodicite
     IHM -> Systeme : choisirPeriodicite(**periodicite**, **codeSouscription**)
+    activate Systeme
         Systeme -> Contrat : modifierPeriodiciteContratClient(**codeSouscription**, **periodicite**)
+        activate Contrat
         Contrat --> Systeme : //Souscription//
+    	deactivate Contrat
     Systeme --> IHM : //Souscription//
+    deactivate Systeme
+end
+deactivate IHM
+deactivate A
+====
 @enduml

@@ -1,17 +1,35 @@
 @startuml
-title DA4.1: Gestion des contrats\n
-
-:Rechercher Contrats Client;
-:Choisir contrat;
-:Consulter contrat;
+title DA4: Consulter contrats client\n
 split
-:Details option;
+:Rechercher contrat client;
+
+split
+	split
+		:Lister tous les contrats client;
+	split again
+		:Lister les contrats client par domaine;
+	end split
+	:Choisir contrat;
 split again
-:Resilier option;
-split again
-:Souscrire option;
-split again
-:Choisir mensualite;
-:Valider mensualite;
+	split
+	:Lister tous les contrats possibles;
+	split again 
+	:Lister les contrat par domaine;
+	end split
+	:Créer un contrat client;
 end split
+split again 
+:Rechercher dernier contrat client;
+end split
+:Consulter contrat client;
+	split
+		:Details option;
+	split again
+		:Resilier option;
+	split again
+		:Souscrire option;
+	split again
+		:Choisir periodicite;
+		:Valider periodicite;
+	end split
 @enduml
